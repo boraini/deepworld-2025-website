@@ -1,0 +1,138 @@
+---
+import path from "node:path/posix";
+import BlogIndex from "src/blog-components/BlogIndex.astro";
+import BlogArticle from "src/blog-components/BlogArticle.astro";
+import { Article, Directory } from "src/blog-components/blog-types";
+
+
+export async function getStaticPaths() {
+    const articlesRoot = "../../articles/";
+
+    const articles = import.meta.glob('../../articles/**/*.(md|astro)');
+    const assets = import.meta.glob('../../articles/**/*.(jpg|png|svg|webp)', { eager: true });
+
+    function preprocessMetadata(metadata) {
+        const result = { ...metadata };
+        if (metadata.thumbnail) {
+            result.thumbnail = assets[path.join(metadata.importPath, metadata.thumbnail)];
+        }
+
+        if (metadata.slug && metadata.slug.startsWith("/authors") && metadata.slug.length > "/authors/".length) {
+            result.title = metadata.fullname;
+            result.excerpt = metadata.nickname;
+        }
+
+        return result;
+    }
+
+    type Route = { params: { slug: string}, props: { directory?: true, article?: true } | Article | Directory };
+    function buildStaticPaths(name, directory, out?: Route[] | undefined): Route[] {
+        if (!out) {
+            out = [];
+        }
+
+        const subdirectories = Object.keys(directory).filter(k => ["__articles", "metadata"].indexOf(k) == -1);
+
+        // Add the current directory to 
+        out.push({
+            // Astro wants the root slug to be undefined
+            params: { slug: name == "/" ? undefined : name },
+            props: {
+                directory: true,
+                metadata: preprocessMetadata(directory.metadata),
+                articles: Object.values(directory.__articles).map(a => ({ ...a, metadata: preprocessMetadata(a.metadata)})),
+                subdirectories: subdirectories.map(k => preprocessMetadata(directory[k].metadata)),
+            }
+        });
+
+        for (const article in directory.__articles ?? []) {
+            out.push({
+                params: {
+                    slug: name + article
+                },
+                props: {
+                    article: true,
+                    metadata: preprocessMetadata(directory.__articles[article].metadata),
+                    Component: directory.__articles[article].Component,
+                }
+            });
+        }
+
+        for (const subdirectory of subdirectories) {
+            buildStaticPaths(name + subdirectory + "/", directory[subdirectory], out);
+        }
+
+        return out;
+    }
+
+    // This will contain the tree view of the whole directory.
+    const directory = { __articles: {} };
+    const directoriesByPath = { [articlesRoot]: directory };
+
+    const articleTasks = [];
+
+    for (const article in articles) {
+        let currentDir = directory;
+        let currentPath = article.substring(articlesRoot.length);
+
+        let currentImportPath = articlesRoot;
+        let currentSlug = "/";
+        while (true) {
+            if (currentPath.indexOf("/") > -1) {
+                const newDirName = currentPath.substring(0, currentPath.indexOf("/"));
+                currentImportPath += newDirName + "/";
+                currentSlug += newDirName + "/";
+
+                if (!currentDir[newDirName]) {
+                    currentDir[newDirName] = { __articles: {} };
+                    directoriesByPath[currentImportPath] = currentDir[newDirName];
+                }
+
+                currentDir = currentDir[newDirName];
+                currentPath = currentPath.substring(currentPath.indexOf("/") + 1);
+            } else {
+                articleTasks.push((async (article, directory) => {
+                    const fileName = article.substring(article.lastIndexOf("/") + 1);
+                    const baseName = fileName.substring(0, fileName.lastIndexOf("."));
+
+                    const imported = await articles[article]();
+                    const metadata = imported.frontmatter;
+
+                    metadata.slug = currentSlug + baseName;
+                    metadata.importPath = currentImportPath;
+
+                    directory.__articles[baseName] = {
+                        metadata,
+                        Component: imported.default,
+                    };
+                })(article, currentDir));
+
+                // We have reached the root. Go for the next article.
+                break;
+            }
+        }
+    }
+
+    await Promise.all(articleTasks);
+
+    const directories = import.meta.glob('../../articles/**/metadata.json');
+
+    for (const directory in directories) {
+        const currentPath = directory.substring(0, directory.lastIndexOf("/") + 1);
+        const currentSlug = currentPath.substring("../../articles".length);
+        const imported = await directories[directory]();
+
+        const metadata = imported.default;
+        metadata.slug = currentSlug;
+        metadata.importPath = currentPath;
+
+        directoriesByPath[currentPath].metadata = metadata;
+    }
+
+    const out = buildStaticPaths("/", directory);
+    //console.dir(out, { depth: 5 });
+    return out;
+}
+---
+
+{ Astro.props.directory ? <BlogIndex {...Astro.props} /> : <BlogArticle {...Astro.props} /> }

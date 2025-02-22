@@ -1,0 +1,16 @@
+---
+import BlogCommon from "./BlogCommon.astro";
+
+export type { Article as Props } from "./blog-types";
+
+const { Component, metadata } = Astro.props;
+---
+
+<BlogCommon>
+    
+    <main class="bg-etched-brass mx-auto my-8 p-4 max-w-192 text-white">
+        <h1 class="text-5xl title-font text-brass mb-4">{ metadata.title }</h1>
+        <h2 class="text-2xl mb-4">{ metadata.excerpt }</h2>
+        <Component />
+    </main>
+</BlogCommon>

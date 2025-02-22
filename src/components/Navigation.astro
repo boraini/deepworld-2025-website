@@ -1,0 +1,13 @@
+---
+import path from "node:path/posix";
+---
+
+<div class="flex flex-row items-center bg-black px-3 py-5 h-16 text-end text-white text-4xl justify-between bg-etched-brass">
+    <a href={path.join(import.meta.env.BASE_URL, "/")} class="float-start">
+        <img src="../../public/logo.svg" alt="Deepworld 2025 Edition" class="top-4 h-12" />
+    </a>
+
+    <ul class="title-font">
+        <li><a href={path.join(import.meta.env.BASE_URL, "/blog")}>Blog</a></li>
+    </ul>
+</div>

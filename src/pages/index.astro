@@ -1,0 +1,40 @@
+---
+import Navigation from "@components/Navigation.astro";
+import Text from "./_text.md";
+import "../stylesheets/common.css";
+---
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <Navigation />
+    </header>
+    <main>
+        <section class="py-18 text-center bg-gray-900 text-white">
+            <h1 class="title-font text-bold text-brass text-8xl my-4">The Legend has Returned</h1>
+            <h2 class="text-2xl">Your favourite Steampunk MMORPG, sunsetted in 2019, is brought back online by devoted fans.</h2>
+            <a class="block mx-auto mt-16 p-2 brass-edging brass-background border-8 max-w-80 rounded-3xl" href="https://drive.google.com/file/d/1R8_Oy4K5CfC8RU967_lt1nL3orJM4axS/view">Download Updated Client</a>
+        </section>
+        <section class="about bg-etched-brass text-white">
+            <div class="mx-auto my-4 max-w-192">
+                <Text />
+            </div>
+        </section>
+    </main>
+</body>
+</html>
+
+<style>
+    :global(html) {
+        background-color: var(--color-etched-brass);
+    }
+    .about :global(h1) {
+        font-family: var(--title-font);
+        font-size: 3rem;
+    }
+</style>

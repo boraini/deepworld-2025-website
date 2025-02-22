@@ -1,0 +1,25 @@
+---
+import { ACTION_ERROR_CODES, ACTION_QUERY_PARAMS, ActionError } from "astro:actions";
+import BlogCard from "./BlogCard.astro";
+import BlogCommon from "./BlogCommon.astro";
+
+export type { Directory as Props } from "./blog-types";
+
+const { metadata, subdirectories, articles } = Astro.props;
+---
+
+<BlogCommon>
+    <h1 class="text-center text-4xl">{metadata.title}</h1>
+
+    <ul class="flex justify-center">
+        {
+            subdirectories.map(subdirectory => (<BlogCard {...subdirectory} />))
+        }
+    </ul>
+
+    <div class="flex justify-center">
+        {
+            articles.map(article => (<BlogCard {...article.metadata} />))
+        }
+    </div>
+</BlogCommon>

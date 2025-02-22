@@ -1,0 +1,38 @@
+---
+import Navigation from "../components/Navigation.astro";
+import "../stylesheets/common.css";
+---
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div class="parallax"></div>
+    <header>
+        <Navigation />
+    </header>
+    <slot />
+</body>
+</html>
+
+<style>
+    .parallax {
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+        z-index: -1;
+        background-image: url("../../public/blog/mountains.svg");
+    }
+</style>
+
+<script>
+    const parallaxElem = document.getElementsByClassName("parallax")[0];
+
+    addEventListener("scroll", e => {
+        parallaxElem.style.backgroundPositionY = (-window.scrollY / 8) + "px"
+    })
+</script>

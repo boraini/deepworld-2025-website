@@ -1,0 +1,12 @@
+---
+import path from "node:path/posix";
+export type { Summary as Props } from "./blog-types";
+
+const { title, excerpt, thumbnail, slug, importPath } = Astro.props;
+---
+
+<a class="card block border-8 m-4 p-2 brass-background brass-edging w-80 h-80" href={path.join(import.meta.env.BASE_URL, "/blog", slug)}>
+    { thumbnail && (<img src={thumbnail.default.src}>) }
+    <span class="block text-amber-950 title-font font-bold text-3xl">{title}</span>
+    <span class="block text-white">{excerpt}</span>
+</a>
