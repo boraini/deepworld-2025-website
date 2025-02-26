@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
+import { ghPagesPostprocessor } from "./gh-pages-postprocessor";
 
 // https://astro.build/config
 export default defineConfig({
@@ -11,6 +12,6 @@ export default defineConfig({
 	base: '/deepworld-2025-website',
 	integrations: [mdx(), sitemap()],
 	vite: {
-		plugins: [tailwindcss()],
+		plugins: [tailwindcss(), ghPagesPostprocessor()],
 	},
 });
