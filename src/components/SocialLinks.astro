@@ -1,0 +1,17 @@
+---
+import { object, objectUtil } from "astro:schema";
+import SocialLink from "./SocialLink.astro";
+
+interface Props {
+    size: string;
+    links: Record<string, string>;
+}
+
+const { links, size } = Astro.props;
+---
+
+<div class="flex justify-center">
+{
+    Object.keys(links).map(n => <SocialLink href={links[n]} target="_blank" size={size} icon={n} />)
+}
+</div>

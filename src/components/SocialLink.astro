@@ -1,0 +1,33 @@
+---
+import Social1 from "@assets/images/social-1.svg";
+
+interface Props {
+    size: string;
+    icon: string;
+    target: string;
+    href: string;
+}
+
+const social1map = {
+    linkedin: 0,
+    instagram: 1,
+    github: 2,
+    twitter: 3,
+    deviantart: 4,
+    tumblr: 5,
+    discord: 6,
+    youtube: 7
+}
+
+const { size, icon, target, href } = Astro.props;
+
+const computedStyles = {
+    width: size,
+    height: size,
+    backgroundPositionY: `calc(-${(social1map[icon] ?? 0)} * ${size})`,
+    backgroundImage: `url(${Social1.src})`,
+    backgroundSize: `100% ${Object.entries(social1map).length * 100}%`,
+};
+---
+
+<a href={href} target={target} class="icon1 text-transparent overflow-hidden mx-4" title={icon} style={computedStyles}>{icon}</a>
