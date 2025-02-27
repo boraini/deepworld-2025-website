@@ -3,7 +3,6 @@ import Navigation from "@components/Navigation.astro";
 import Text from "./_text.md";
 import "../stylesheets/common.css";
 import SocialLinks from "@components/SocialLinks.astro";
-import { Image } from "astro:assets";
 ---
 
 <html lang="en">
@@ -17,20 +16,20 @@ import { Image } from "astro:assets";
         <Navigation />
     </header>
     <main>
-        <section id="social-section" class="relative py-18 text-center bg-gray-900 text-white h-120">
-            <video class="absolute w-full h-full left-0 top-0 object-cover" width={960} height={540} autoplay loop muted playsinline preload="none">
+        <section id="social-section" class="relative py-18 text-center bg-gray-900 text-white">
+            <video class="absolute w-full h-full inset-0 object-cover" width={960} height={540} autoplay loop muted playsinline preload="none">
                 <source src="https://v2202410239072292297.goodsrv.de:6443/deepworld-website-video.webm" type="video/webm" />
                 <source src="https://v2202410239072292297.goodsrv.de:6443/deepworld-website-video.mp4" type="video/mp4" />
             </video>
-            <div id="social-section-contents" style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)", maxWidth: "200rem" }}>
-            <h1 class="title-font text-bold text-brass text-8xl my-4">The Legend has Returned</h1>
-            <h2 class="text-2xl">Your favourite Steampunk MMORPG, sunsetted in 2019, is brought back online by devoted fans.</h2>
-            <a class="block mx-auto mt-16 mb-8 p-2 brass-edging brass-background border-8 max-w-80 rounded-3xl" href="https://drive.google.com/file/d/1R8_Oy4K5CfC8RU967_lt1nL3orJM4axS/view">Download Updated Client</a>
+            <div id="social-section-contents" class="relative m-auto z-20 max-w-240 top-0 px-8">
+            <h1 class="title-font text-bold text-brass text-8xl mb-4">The Legend has Returned</h1>
+            <h2 class="text-2xl">Your favourite Steampunk MMORPG, sunsetted in 2019, is brought back online by its devoted fans.</h2>
+            <a class="block mx-auto mt-16 mb-8 p-3 brass-edging brass-background border-8 max-w-90 rounded-full text-etched-brass font-bold text-xl" href="https://drive.google.com/file/d/1R8_Oy4K5CfC8RU967_lt1nL3orJM4axS/view">Download Updated Client</a>
             <SocialLinks size="3em" links={{ "discord": "https://discord.gg/J9FxmXM", "github": "https://github.com/kuroppoi/brainwine" }} />
             </div>
         </section>
         <section class="about bg-etched-brass text-white">
-            <div class="mx-auto my-4 max-w-192">
+            <div class="mx-auto my-4 max-w-192 p-4">
                 <Text />
             </div>
         </section>
@@ -47,14 +46,3 @@ import { Image } from "astro:assets";
         font-size: 3rem;
     }
 </style>
-
-<script>
-    function onResize() {
-        const socialSectionHeight = document.getElementById("social-section-contents").getBoundingClientRect().height;
-        document.getElementById("social-section").style.height = 1.2 * socialSectionHeight + "px";
-    }
-
-    onResize();
-
-    addEventListener("resize", onResize);
-</script>
