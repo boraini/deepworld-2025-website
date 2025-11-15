@@ -152,7 +152,7 @@ type AccomplishmentsSectionItem = {
 
 function Section(sectionConfig: GenericSectionItem[], columns: (item: GenericSectionItem) => string) {
     const main = sectionConfig.map((item) => `<tr>${columns(item)}</tr>`).join("")
-    return `<table><tbody>${main}</tbody></table>`
+    return `<table class="w-full box-border"><tbody>${main}</tbody></table>`
 }
 
 function Kills(data) {
@@ -168,25 +168,26 @@ function Kills(data) {
 }
 
 function Layout(columns: (item: GenericSectionItem) => string) {return `
-<main class="mx-auto max-w-5xl">
-<table class="w-full">
-<tbody>
-<tr>
-<td class="p-4 align-top">
-<section class="my-4 border-stats body-font bg-blue-950 text-white title-font">${Section(VitalsSection, columns)}</section>
-</td>
-<td class="p-4 align-top">
-<section class="my-4 border-stats body-font bg-blue-950 text-white title-font">${Section(AccomplishmentsSection, columns)}</section>
-<section class="my-4 border-stats body-font bg-blue-950 text-white title-font">
-<table>
-<tbody id="Kills">
-</tbody>
-</table>
-</section>
-</td>
-</tr>
-</tbody>
-</table>
+<main class="flex flex-col sm:flex-row mx-auto my-4 max-w-5xl markdown">
+  <div class="m-4 mb-0 grow">
+    <section class="border-stats body-font bg-blue-950 text-white title-font">
+      <h2 class="text-brass" style="margin-top: calc(4 * var(--spacing))">Vitals</h2>
+      ${Section(VitalsSection, columns)}
+    </section>
+  </div>
+  <div class="m-4 mb-0 grow">
+    <section class="border-stats body-font bg-blue-950 text-white title-font">
+      <h2 class="text-brass" style="margin-top: calc(4 * var(--spacing))">Accomplishments</h2>
+      ${Section(AccomplishmentsSection, columns)}
+    </section>
+    <section class="mt-4 border-stats body-font bg-blue-950 text-white title-font">
+      <h2 class="text-brass" style="margin-top: calc(4 * var(--spacing))">Kills</h2>
+      <table class="w-full box-border">
+        <tbody id="Kills">
+        </tbody>
+      </table>
+    </section>
+  </div>
 </main>
 `
 }
@@ -198,7 +199,7 @@ export function Pending() {
 }
 
 export function Scaffolding() {
-    return Layout(row => `<td>${row.label}</td><td id="${row.label}" class="px-4"></td>`)
+    return Layout(row => `<td class="max-w-1/2">${row.label}</td><td id="${row.label}" class="px-4"></td>`)
 }
 
 function formatNumber(n : number) {

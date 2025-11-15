@@ -15,7 +15,7 @@ import "../stylesheets/markdown.css";
     const playerMatch = currentPathname.match(/\/players\/([^\/]{1,64})\/?$/);
     const rankingMatch = currentPathname.match(/\/players\/?$/);
 
-    const proxy = "http://pulse.boraini.com:3030";
+    const proxy = location.host.match(/localhost(:|$)/) ? "http://localhost:3030" : "http://pulse.boraini.com:3030";
     const proxied = (href) =>
         proxy ? proxy + "/?href=" + encodeURIComponent(href) : href;
     const playerApi = "http://v2202410239072292297.goodsrv.de:5001";
@@ -81,7 +81,7 @@ import "../stylesheets/markdown.css";
     }
 </script>
 
-<html lang="en">
+<html lang="en" class="m-0 p-0 w-full min-h-full bg-gray-950">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -93,7 +93,7 @@ import "../stylesheets/markdown.css";
             rel="stylesheet"
         />
     </head>
-    <body>
+    <body class="m-0 p-0 w-full min-h-full">
         <div
             id="app"
             set:html={ErrorBoundary.Scaffolding(
