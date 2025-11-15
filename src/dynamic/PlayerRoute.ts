@@ -1,3 +1,5 @@
+import { formatNumber } from "./common"
+
 const EntityTitles = {"avatar":"Player","ghost":"Ghost","revenant":"Revenant","dire-revenant":"Dire Revenant","revenant-lord":"Revenant Lord","terrapus/child":"Juvenile Terrapus","terrapus/adult":"Adult Terrapus","terrapus/racing":"Racing Terrapus","terrapus/pet":"Pet Terrapus","terrapus/fire":"Fire Terrapus","terrapus/acid":"Acid Terrapus","terrapus/skeleton":"Skeleton Terrapus","terrapus/frost":"Frost Terrapus","terrapus/queen":"Queen Terrapus","creatures/rat":"Rat","creatures/skunk":"Skunk","creatures/skunk-pet":"Pet Skunk","creatures/armadillo":"Armadillo","creatures/roach":"Roach","creatures/roach-large":"Large Roach","creatures/bunny-ice":"Bunny","creatures/bunny-ice-pet":"Pet Bunny","creatures/crow":"Crow","creatures/crow-auto":"Cyborg Crow","creatures/crow-pet":"Pet Crow","creatures/vulture":"Vulture","creatures/vulture-pet":"Pet Vulture","creatures/bluejay":"Bluejay","creatures/cardinal":"Cardinal","creatures/seagull":"Seagull","creatures/butterfly-monarch":"Monarch Butterfly","creatures/butterfly-papilio-ulysses":"Papilio Ulysees Butterfly","creatures/butterfly-swallowtail":"Swallowtail Butterfly","creatures/butterfly-green":"Green Butterfly","creatures/butterfly-moth":"Moth","creatures/butterfly-owl":"Owl Butterfly","creatures/butterfly-paper-kite":"Paper Kite Butterfly","creatures/butterfly-rumanzovia":"Rumanzovia Butterfly","creatures/scorpion":"Scorpion","creatures/scorpion-large":"Large Scorpion","creatures/bat":"Bat","creatures/bat-auto":"Cyborg Bat","creatures/sandworm":"Sand Worm","creatures/snowworm":"Arctic Worm","creatures/tentacle":"Tentacle Monster","ground/geyser-small":"Geyser","desert/sandstorm":"Sand Storm","automata/android":"Android","automata/cat":"Android Cat","automata/dog":"Android Dog","automata/butler-brass":"Brass Butler Bot","automata/butler-diamond":"Diamond Butler Bot","automata/butler-onyx":"Onyx Butler Bot","automata/tiny":"Tiny Automata","automata/small":"Small Automata","automata/medium":"Medium Automata","automata/large":"Large Automata","brains/tiny-crawler":"Baby Crawler Brain","brains/tiny-flyer":"Baby Flyer Brain","brains/small":"Juvenile Brain","brains/medium":"Adult Brain","brains/medium-dire":"Dire Adult Brain","brains/large":"Brain Lord","aquatic/clownfish":"Clownfish","aquatic/flame-hawkfish":"Flame Hawkfish","aquatic/sergeant-major":"Sergeant Major Fish","aquatic/almaco-jack":"Almaco Jack Fish","aquatic/angelfish":"Angelfish","aquatic/codfish":"Codfish","aquatic/herring":"Herring Fish","aquatic/piranha":"Piranha","aquatic/anemone-red":"Red Anemone","aquatic/anemone-magenta":"Magenta Anemone","aquatic/anemone-electric":"Electric Anemone"}
 const SortedEntityIds = Object.keys(EntityTitles).sort((a, b) => EntityTitles[a] < EntityTitles[b] ? -1 : 1)
 
@@ -200,23 +202,6 @@ export function Pending() {
 
 export function Scaffolding() {
     return Layout(row => `<td class="max-w-1/2">${row.label}</td><td id="${row.label}" class="px-4"></td>`)
-}
-
-function formatNumber(n : number) {
-  const raw = n.toString()
-
-  const foundDecimalIndex = raw.indexOf(".")
-  const decimalIndex = foundDecimalIndex == -1 ? raw.length : foundDecimalIndex
-  const intStart = n < 0 ? 1 : 0
-  const numIntDigits = decimalIndex - intStart
-  if (numIntDigits <= 4) return raw
-  let result = raw.substring(decimalIndex)
-  for (let end = decimalIndex; end > 0; end -= 3) {
-    result = raw.substring(end - 3, end) + result
-    if (end - 3 > intStart) result = "," + result
-  }
-  if (n < 0) result = "-" + result
-  return result
 }
 
 export function collectData(data, config: GenericSectionItem[], result) {

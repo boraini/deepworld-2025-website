@@ -1,8 +1,12 @@
 @import "tailwindcss";
 
-:root {
+@theme {
     --color-brass: #d5a259;
     --color-etched-brass: #1e1200;
+    --color-gold: #ffee00
+}
+
+:root {
     --title-font: Telegrama;
     --body-font: "Raleway", "Helvetica Neue", "Arial", sans-serif;
     font-family: var(--body-font);
@@ -32,18 +36,6 @@
 
 .brass-edging {
     border: 0.25rem solid var(--color-etched-brass);
-}
-
-.text-brass {
-    color: var(--color-brass);
-}
-
-.text-etched-brass {
-    color: var(--color-etched-brass);
-}
-
-.bg-etched-brass {
-    background-color: var(--color-etched-brass);
 }
 
 .border-stats {
