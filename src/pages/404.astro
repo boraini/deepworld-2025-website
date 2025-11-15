@@ -16,7 +16,7 @@ import "../stylesheets/markdown.css";
     const playerMatch = currentPathname.match(/\/players\/([^\/]{1,64})\/?$/);
     const rankingMatch = currentPathname.match(/\/players\/?$/);
 
-    const proxy = location.host.match(/localhost(:|$)/) ? "http://localhost:3030" : "http://pulse.boraini.com:3030";
+    const proxy = location.host.match(/localhost(:|$)/) ? "http://localhost:3030" : "https://pulse.boraini.com:3030";
     const proxied = (href) =>
         proxy ? proxy + "/?href=" + encodeURIComponent(href) : href;
     const playerApi = "http://v2202410239072292297.goodsrv.de:5001";
