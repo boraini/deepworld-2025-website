@@ -1,0 +1,105 @@
+---
+// SSR imports
+import * as ErrorBoundary from "../dynamic/ErrorBoundary";
+import "../stylesheets/common.css";
+import "../stylesheets/markdown.css";
+---
+
+<script>
+    // CSR imports
+    import * as ErrorBoundary from "../dynamic/ErrorBoundary";
+    import * as PlayerRoute from "../dynamic/PlayerRoute";
+
+    const currentPathname = window.location.pathname;
+
+    const playerMatch = currentPathname.match(/\/players\/([^\/]{1,64})\/?$/);
+    const rankingMatch = currentPathname.match(/\/players\/?$/);
+
+    const proxy = "http://pulse.boraini.com:3030";
+    const proxied = (href) =>
+        proxy ? proxy + "/?href=" + encodeURIComponent(href) : href;
+    const playerApi = "http://v2202410239072292297.goodsrv.de:5001";
+
+    type PlayerRoute = { id: "/players/$username"; username: string };
+    type RankingRoute = { id: "/players" };
+    type ErrorRoute = { id: "error"; message: string; stackTrace: string };
+    type RouteType = PlayerRoute | RankingRoute | ErrorRoute;
+
+    if (playerMatch) {
+        const [_, username] = playerMatch;
+        onRouteChange({ id: "/players/$username", username: username });
+    } else if (rankingMatch) {
+        onRouteChange({ id: "/players" });
+    }
+
+    function onRouteChange(route: RouteType) {
+        switch (route.id) {
+            case "/players/$username":
+                render(PlayerRoute.Pending());
+                fetch(proxied(`${playerApi}/players/${route.username}`)).then(
+                    async (r) => {
+                        if (r.ok) {
+                            const data = await r.json();
+                            render(PlayerRoute.Scaffolding());
+                            populate(PlayerRoute.Data(data));
+                            document.title = `${route.username} - Deepworld 2025 MMO`;
+                        } else {
+                            onRouteChange({
+                                id: "error",
+                                message: "Error occurred while fetching data.",
+                                stackTrace: await r.text(),
+                            });
+                        }
+                    },
+                    (e) =>
+                        onRouteChange({
+                            id: "error",
+                            message: "Error occurred while fetching data.",
+                            stackTrace: e,
+                        }),
+                );
+                break;
+            case "error":
+                render(
+                    ErrorBoundary.Scaffolding(
+                        route.message,
+                        null,
+                        route.stackTrace,
+                    ),
+                );
+        }
+    }
+
+    function render(component: string) {
+        document.getElementById("app").innerHTML = component;
+    }
+
+    function populate(components: Record<string, string>) {
+        for (const [id, component] of Object.entries(components)) {
+            document.getElementById(id).innerHTML = component;
+        }
+    }
+</script>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Not Found</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <div
+            id="app"
+            set:html={ErrorBoundary.Scaffolding(
+                "Page not found!",
+                "Please try refreshing the page and make sure to enable Javascript, or contact the developers on Discord.",
+            )}
+        />
+    </body>
+</html>

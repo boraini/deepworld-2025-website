@@ -4,9 +4,9 @@ Using the open-source original server code, we have created a new server softwar
 
 # Special Thanks
 
-- Bytebin, LLC for making the server and game configuration open-source and still available in 2025.
-- Graptik-Blizzard and MisterSirCode for managing the updates to the client and commissioning amazing new visual assets.
-- Kuroppoi for developing the new Java server and fixing all the server-side bugs.
-- Boraini for developing new features and the missing features on Kuroppoi's server, and getting the code ready for the live server.
-- Fraello for making prefabs and dungeons that make world exploration even more fun.
-- The Deepworld player community for staying together and providing feedback during the 6 years where the game was absent from our lives.
+- **Bytebin, LLC** for making the server and game configuration open-source and still available in 2025.
+- **Graptik-Blizzard and MisterSirCode** for managing the updates to the client and commissioning amazing new visual assets.
+- **Kuroppoi** for developing the new Java server and fixing all the server-side bugs.
+- **Boraini** for developing new features and the missing features on Kuroppoi's server, and getting the code ready for the live server.
+- **Fraello and Ironspagheto** for making prefabs and dungeons that make world exploration even more fun.
+- **The Deepworld player community** for staying together and providing feedback during the 6 years where the game was absent from our lives.
