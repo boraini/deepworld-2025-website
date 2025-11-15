@@ -1,4 +1,5 @@
 ---
+import path from "node:path/posix";
 import Navigation from "@components/Navigation.astro";
 import Text from "./_text.md";
 import "../stylesheets/common.css";
@@ -28,7 +29,10 @@ import SocialLinks from "@components/SocialLinks.astro";
             <div id="social-section-contents" class="relative m-auto z-20 max-w-240 top-0 px-8">
             <h1 class="title-font text-bold text-brass text-6xl mb-4">The Legend has Returned</h1>
             <h2 class="text-2xl">Your favourite Steampunk MMORPG, sunsetted in 2019, is brought back online by its devoted fans.</h2>
-            <a class="block mx-auto mt-16 mb-8 p-3 brass-edging brass-background border-8 max-w-90 rounded-full text-etched-brass font-bold text-xl" href="https://drive.google.com/file/d/1R8_Oy4K5CfC8RU967_lt1nL3orJM4axS/view">Download Updated Client</a>
+            <p class="mx-auto flex flex-col md:flex-row mt-16 mb-8 max-w-160">
+            <a class="block grow mx-4 my-2 p-3 brass-edging brass-background border-8 rounded-full text-etched-brass font-bold text-xl" href="https://drive.google.com/file/d/1R8_Oy4K5CfC8RU967_lt1nL3orJM4axS/view">Download Updated Client</a>
+            <a class="block grow mx-4 my-2 p-3 brass-edging brass-background border-8 rounded-full text-etched-brass font-bold text-xl" href={path.join(import.meta.env.BASE_URL, "/players")}>View Players</a>
+            </p>
             <SocialLinks size="3em" links={{ "discord": "https://discord.gg/J9FxmXM", "github": "https://github.com/kuroppoi/brainwine" }} />
             </div>
         </section>
