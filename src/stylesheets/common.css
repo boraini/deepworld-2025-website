@@ -1,16 +1,25 @@
 @import "tailwindcss";
 
-:root {
+@theme {
     --color-brass: #d5a259;
     --color-etched-brass: #1e1200;
-    --title-font: Imbue;
-    --body-font: "Helvetica Neue", "Arial", sans-serif;
+    --color-gold: #ffee00
+}
+
+:root {
+    --title-font: Telegrama;
+    --body-font: "Raleway", "Helvetica Neue", "Arial", sans-serif;
     font-family: var(--body-font);
 }
 
 @font-face {
     font-family: Imbue;
     src: url("../assets/fonts/Imbue.ttf");
+}
+
+@font-face {
+    font-family: Telegrama;
+    src: url("../assets/fonts/telegrama_render.otf");
 }
 
 .title-font {
@@ -29,14 +38,10 @@
     border: 0.25rem solid var(--color-etched-brass);
 }
 
-.text-brass {
-    color: var(--color-brass);
-}
-
-.text-etched-brass {
-    color: var(--color-etched-brass);
-}
-
-.bg-etched-brass {
-    background-color: var(--color-etched-brass);
+.border-stats {
+    border-width: 1rem;
+    border-style: solid;
+    border-image-source: url(/public/decorations/deepworld-border-box.png);
+    border-image-slice: 18 fill;
+    border-image-repeat: stretch;
 }
