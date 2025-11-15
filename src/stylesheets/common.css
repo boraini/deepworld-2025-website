@@ -41,7 +41,7 @@
 .border-stats {
     border-width: 1rem;
     border-style: solid;
-    border-image-source: url(/decorations/deepworld-border-box.png);
+    border-image-source: url(/deepworld-2025-website/decorations/deepworld-border-box.png);
     border-image-slice: 18 fill;
     border-image-repeat: stretch;
 }
