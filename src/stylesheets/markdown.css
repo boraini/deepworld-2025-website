@@ -1,3 +1,5 @@
+@layer base {
+
 .markdown h1, .markdown h2, .markdown h3, .markdown h4, .markdown h5, .markdown h6 {
     font-family: var(--title-font);
     margin: 2rem 0 1rem 0;
@@ -34,4 +36,10 @@
 
 .markdown li {
     list-style-position: outside;
+}
+
+.markdown div, .markdown p, .markdown ul, .markdown ol {
+    margin-bottom: 0.75em;
+}
+
 }

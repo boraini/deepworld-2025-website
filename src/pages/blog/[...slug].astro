@@ -11,22 +11,38 @@ export async function getStaticPaths() {
     const articles = import.meta.glob('../../articles/**/*.(md|astro)');
     const assets = import.meta.glob('../../articles/**/*.(jpg|png|svg|webp)', { eager: true });
 
-    function preprocessMetadata(metadata) {
+    async function preprocessMetadata(metadata) {
         const result = { ...metadata };
         if (metadata.thumbnail) {
             result.thumbnail = assets[path.join(metadata.importPath, metadata.thumbnail)];
         }
 
         if (metadata.slug && metadata.slug.startsWith("/authors") && metadata.slug.length > "/authors/".length) {
+            // Author Page
             result.title = metadata.fullname;
             result.excerpt = metadata.nickname;
+        } else {
+            // Regular Article
+            if (metadata.authors) {
+                result.authors = await Promise.all(metadata.authors.map(async (nickname: string) => {
+                    const authorArticle = await articles[`../../articles/authors/${nickname}.md`]()
+                    if (authorArticle) {
+                        return {
+                            url: path.join(import.meta.env.BASE_URL, `/blog/authors/${nickname}`),
+                            nickname: nickname,
+                            // nickname in frontmatter overrides the file name
+                            ...authorArticle.frontmatter
+                        }
+                    }
+                }))
+            }
         }
 
         return result;
     }
 
     type Route = { params: { slug: string}, props: { directory?: true, article?: true } | Article | Directory };
-    function buildStaticPaths(name, directory, out?: Route[] | undefined): Route[] {
+    async function buildStaticPaths(name, directory, out?: Route[] | undefined): Route[] {
         if (!out) {
             out = [];
         }
@@ -39,9 +55,9 @@ export async function getStaticPaths() {
             params: { slug: name == "/" ? undefined : name },
             props: {
                 directory: true,
-                metadata: preprocessMetadata(directory.metadata),
-                articles: Object.values(directory.__articles).map(a => ({ ...a, metadata: preprocessMetadata(a.metadata)})),
-                subdirectories: subdirectories.map(k => preprocessMetadata(directory[k].metadata)),
+                metadata: await preprocessMetadata(directory.metadata),
+                articles: await Promise.all(Object.values(directory.__articles).map(async a => ({ ...a, metadata: await preprocessMetadata(a.metadata) }))),
+                subdirectories: await Promise.all(subdirectories.map(k => preprocessMetadata(directory[k].metadata))),
             }
         });
 
@@ -52,15 +68,13 @@ export async function getStaticPaths() {
                 },
                 props: {
                     article: true,
-                    metadata: preprocessMetadata(directory.__articles[article].metadata),
+                    metadata: await preprocessMetadata(directory.__articles[article].metadata),
                     Component: directory.__articles[article].Component,
                 }
             });
         }
 
-        for (const subdirectory of subdirectories) {
-            buildStaticPaths(name + subdirectory + "/", directory[subdirectory], out);
-        }
+        await Promise.all(subdirectories.map(subdirectory => buildStaticPaths(name + subdirectory + "/", directory[subdirectory], out)));
 
         return out;
     }
@@ -130,7 +144,7 @@ export async function getStaticPaths() {
     }
 
     const out = buildStaticPaths("/", directory);
-    //console.dir(out, { depth: 5 });
+    //console.dir(await out, { depth: 5 });
     return out;
 }
 ---
