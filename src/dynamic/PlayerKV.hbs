@@ -1,0 +1,19 @@
+<table class="w-full box-border">
+    <tbody>
+        {{#if data}}
+        {{#each config.config}}
+        <tr>
+            <td class="max-w-1/2">{{label}}</td>
+            <td class="px-4">{{resolveDataPath @root.data dataPath}}</td>
+        </tr>
+        {{/each}}
+        {{else}}
+        {{log @root}}
+        {{#times config.ExpectedNumberOfItems}}
+        <tr>
+            {{> PendingRow index=. }}
+        </tr>
+        {{/times}}
+        {{/if}}
+    </tbody>
+</table>

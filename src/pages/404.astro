@@ -8,23 +8,35 @@ import "../stylesheets/markdown.css";
 <script>
     // CSR imports
     import * as ErrorBoundary from "../dynamic/ErrorBoundary";
-    import * as PlayerRoute from "../dynamic/PlayerRoute";
-    import * as RankingsRoute from "../dynamic/RankingsRoute";
+    import { PlayerRoute, PlayerLoader, PlayerPlaceholderLoader } from "../dynamic/PlayerRoute";
+    import {
+        RankingsRoute,
+        RankingsLoader,
+        RankingsPlaceholderLoader,
+    } from "src/dynamic/RankingsRoute";
 
     const currentPathname = window.location.pathname;
 
     const playerMatch = currentPathname.match(/\/players\/([^\/]{1,64})\/?$/);
     const rankingMatch = currentPathname.match(/\/players\/?$/);
 
-    const proxy = location.host.match(/localhost(:|$)/) ? "http://localhost:3030" : "https://pulse.boraini.com:3030";
-    const proxied = (href) =>
-        proxy ? proxy + "/?href=" + encodeURIComponent(href) : href;
-    const playerApi = "http://v2202410239072292297.goodsrv.de:5001";
+    type RouteType =
+        | { id: "/players/$username"; username: string }
+        | { id: "/players" }
+        | { id: "error"; message: string; stackTrace: string }
 
-    type PlayerRoute = { id: "/players/$username"; username: string };
-    type RankingsRoute = { id: "/players" };
-    type ErrorRoute = { id: "error"; message: string; stackTrace: string };
-    type RouteType = PlayerRoute | RankingsRoute | ErrorRoute;
+    const RouteDefinitions = {
+        "/players/$username": {
+            placeholderLoader: PlayerPlaceholderLoader,
+            loader: PlayerLoader,
+            Component: PlayerRoute,
+        },
+        "/players": {
+            placeholderLoader: RankingsPlaceholderLoader,
+            loader: RankingsLoader,
+            Component: RankingsRoute,
+        }
+    } as const
 
     if (playerMatch) {
         const [_, username] = playerMatch;
@@ -32,20 +44,22 @@ import "../stylesheets/markdown.css";
     } else if (rankingMatch) {
         onRouteChange({ id: "/players" });
     }
-    
-    function setHeader(config?: { title: string, backlink?: string }) {
+
+    function setHeader(config?: { title: string; backlink?: string }) {
         if (config) {
-            document.getElementsByTagName("header")[0].classList.remove("hidden")
-            document.getElementById("title").innerHTML = config.title
-            const backlink = document.getElementById("backlink")
-            backlink.setAttribute("href", config.backlink ?? "#")
+            document
+                .getElementsByTagName("header")[0]
+                .classList.remove("hidden");
+            document.getElementById("title").innerHTML = config.title;
+            const backlink = document.getElementById("backlink");
+            backlink.setAttribute("href", config.backlink ?? "#");
             if (config.backlink) {
-                backlink.classList.remove("hidden")
+                backlink.classList.remove("hidden");
             } else {
-                backlink.classList.add("hidden")
+                backlink.classList.add("hidden");
             }
         } else {
-            document.getElementsByTagName("header")[0].classList.add("hidden")
+            document.getElementsByTagName("header")[0].classList.add("hidden");
         }
     }
 
@@ -61,68 +75,32 @@ import "../stylesheets/markdown.css";
             setHeader(null);
         }
 
-        return (async() => {
-        switch (route.id) {
-            case "/players/$username":
-                render(PlayerRoute.Pending());
-                setHeader({ title: route.username, backlink: "../players" })
-                await fetch(proxied(`${playerApi}/players/${route.username}`)).then(
-                    async (r) => {
-                        if (r.ok) {
-                            const data = await r.json();
-                            render(PlayerRoute.Scaffolding());
-                            populate(PlayerRoute.Data(data));
-                            document.title = `${route.username} - Deepworld 2025 MMO`;
-                        } else {
-                            onRouteChange({
-                                id: "error",
-                                message: "Error occurred while fetching data.",
-                                stackTrace: await r.text(),
-                            });
-                        }
-                    }
-                );
-                break;
-            case "/players":
-                render(RankingsRoute.Pending())
-                setHeader({ title: "Players" })
-                const stats = ["items_mined", "items_placed", "items_crafted"];
-                const responses = await Promise.all(stats.map(s => fetch(proxied(`${playerApi}/players?sort=${s}`))))
-                const failed = responses.find(r => !r.ok);
-                if (failed) {
-                    onRouteChange({
-                        id: "error",
-                        message: "Error occurred while fetching data.",
-                        stackTrace: await failed.text(),
-                    })
-                    return
-                }
-                const result = {}
-                for (let i = 0; i < stats.length; i++) {
-                    const stat = stats[i];
-                    const data = (await responses[i].json()).map(p => [p.name, p[stat]])
-                    result[stat] = data
-                }
-                render(RankingsRoute.Scaffolding())
-                populate(RankingsRoute.Data(result))
-                break;
+        function onError(error) {
+            onRouteChange({ ...error, id: "error" });
         }
-        })()
-            .catch(e => onRouteChange({
+
+        return (async () => {
+            for (const [ routeId, definition ] of Object.entries(RouteDefinitions)) {
+                if (routeId === route.id) {
+                    render(definition.Component(definition.placeholderLoader()))
+                    const result = await definition.loader(route, { onError })
+                    if (result) {
+                        render(definition.Component(result))
+                    }
+                    return;
+                }
+            }
+        })().catch((e) => {
+            onRouteChange({
                 id: "error",
                 message: "Error occurred while fetching data.",
                 stackTrace: e,
-            }))
+            });
+        });
     }
 
     function render(component: string) {
         document.getElementById("app").innerHTML = component;
-    }
-
-    function populate(components: Record<string, string>) {
-        for (const [id, component] of Object.entries(components)) {
-            document.getElementById(id).innerHTML = component;
-        }
     }
 </script>
 
@@ -141,8 +119,18 @@ import "../stylesheets/markdown.css";
     <body class="m-0 p-0 w-full min-h-full">
         <header class="hidden mb-12 headerimg">
             <div class="relative mx-auto max-w-5xl h-32">
-                <h1 id="title" class="absolute left-4 top-full px-2 -translate-y-1/2 bg-etched-brass border-4 border-brass text-4xl text-white" class="title">Not Found</h1>
-                <a id="backlink" class="hidden absolute top-full right-4 text-white" href="#">Go Back</a>
+                <h1
+                    id="title"
+                    class="absolute left-4 top-full px-2 -translate-y-1/2 bg-etched-brass border-4 border-brass text-4xl text-white"
+                    class="title"
+                >
+                    Not Found
+                </h1>
+                <a
+                    id="backlink"
+                    class="hidden absolute top-full right-4 text-white"
+                    href="#">Go Back</a
+                >
             </div>
         </header>
         <div
@@ -159,5 +147,32 @@ import "../stylesheets/markdown.css";
     .headerimg {
         background-image: url(/deepworld-2025-website/decorations/stats-header.png);
         background-size: cover;
+    }
+
+    @keyframes pending-row-animation {
+        0% {
+            opacity: 0.2;
+        }
+        50% {
+            opacity: 0.5;
+        }
+        100% {
+            opacity: 0.2;
+        }
+    }
+
+    :global(.pending-row-animation) {
+        counter-increment: pending-row;
+        animation-name: pending-row-animation;
+        animation-iteration-count: infinite;
+        animation-duration: 2s;
+        height: 1em;
+        background-color: white;
+        border-radius: 0.2em;
+        margin-bottom: 0.2em;
+    }
+
+    :global(.pending-row-animation):first {
+        counter-reset: pending-row;
     }
 </style>

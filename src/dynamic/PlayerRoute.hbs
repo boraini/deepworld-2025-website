@@ -1,0 +1,18 @@
+<main class="flex flex-col sm:flex-row mx-auto my-4 max-w-5xl markdown">
+  <div class="m-4 mb-0 grow">
+    <section class="border-stats body-font bg-blue-950 text-white title-font">
+      <h2 class="text-brass" style="margin-top: calc(4 * var(--spacing))">Vitals</h2>
+      {{> PlayerKV config=vitals }}
+    </section>
+  </div>
+  <div class="m-4 mb-0 grow">
+    <section class="border-stats body-font bg-blue-950 text-white title-font">
+      <h2 class="text-brass" style="margin-top: calc(4 * var(--spacing))">Accomplishments</h2>
+      {{> PlayerKV config=accomplishments }}
+    </section>
+    <section class="mt-4 border-stats body-font bg-blue-950 text-white title-font">
+      <h2 class="text-brass" style="margin-top: calc(4 * var(--spacing))">Kills</h2>
+      {{> PlayerKills config=kills }}
+    </section>
+  </div>
+</main>

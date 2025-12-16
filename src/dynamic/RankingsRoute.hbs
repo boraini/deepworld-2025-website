@@ -1,0 +1,16 @@
+<main class="mx-auto my-4 max-w-5xl markdown" id="rankings">
+  <div class="flex flex-col md:flex-row">
+    <section class="m-4 mb-0 grow border-stats body-font bg-blue-950 text-white title-font">
+      <h2 class="text-brass" style="margin-top: calc(4 * var(--spacing));">Items Mined</h2>
+      {{> Ranking items_mined }}
+    </section>
+    <section class="m-4 mb-0 grow border-stats body-font bg-blue-950 text-white title-font">
+      <h2 class="text-brass" style="margin-top: calc(4 * var(--spacing));">Items Placed</h2>
+      {{> Ranking items_placed }}
+    </section>
+    <section class="m-4 mb-0 grow border-stats body-font bg-blue-950 text-white title-font">
+      <h2 class="text-brass" style="margin-top: calc(4 * var(--spacing));">Items Crafted</h2>
+      {{> Ranking items_crafted }}
+    </section>
+  </div>
+</main>

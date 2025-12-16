@@ -1,0 +1,26 @@
+<table class="box-border w-full">
+    <tbody>
+        {{#if data}}
+        {{#each data}}
+        {{log data}}
+        <tr>
+            <td>{{ oneBased @index }}&nbsp;-</td>
+            <td class="max-w-1/2 text-gold">
+                <a href='./players/{{0}}'>
+                    {{0}}
+                </a>
+            </td>
+            <td>
+                {{ formatNumber this.[1] }}
+            </td>
+        </tr>
+        {{/each}}
+        {{else}}
+        {{#times ExpectedNumberOfItems}}
+        <tr>
+            {{> PendingRow index=.}}
+        </tr>
+        {{/times}}
+        {{/if}}
+    </tbody>
+</table>

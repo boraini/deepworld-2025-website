@@ -1,0 +1,19 @@
+<table class="w-full box-border">
+    <tbody>
+        {{#if data}}
+        {{#each config.SortedEntityIds}}
+        <tr>
+            <td class="max-w-1/2">{{lookup ../config.EntityTitles .}}:</td>
+            <td class="px-4">{{#if (lookup @root.data.statistics.kills .)}}{{formatNumber (lookup
+                @root.data.statistics.kills .)}}{{else}}0{{/if}}</td>
+        </tr>
+        {{/each}}
+        {{else}}
+        {{#times config.ExpectedNumberOfItems}}
+        <tr>
+            {{> PendingRow index=. }}
+        </tr>
+        {{/times}}
+        {{/if}}
+    </tbody>
+</table>
