@@ -9,7 +9,7 @@ import PlayerRouteHbs from "./PlayerRoute.hbs?raw"
 import PlayerKillsHbs from "./PlayerKills.hbs?raw"
 import PlayerKVHbs from "./PlayerKV.hbs?raw"
 
-import { AccomplishmentsSectionItem, GenericSectionItem } from "./PlayerInfo"
+import { AccomplishmentsSectionItem, GenericSectionItem } from "./PlayerRoute"
 
 const HandlebarsDynamic = Handlebars.create()
 
@@ -18,12 +18,13 @@ HandlebarsDynamic.registerPartial("Ranking", RankingHbs)
 HandlebarsDynamic.registerPartial("PlayerKills", PlayerKillsHbs)
 HandlebarsDynamic.registerPartial("PlayerKV", PlayerKVHbs)
 
-HandlebarsDynamic.registerHelper('oneBased', n => n + 1)
+HandlebarsDynamic.registerHelper("oneBased", (n) => n + 1)
 function formatNumber(n: number) {
     const raw = n.toString()
 
     const foundDecimalIndex = raw.indexOf(".")
-    const decimalIndex = foundDecimalIndex == -1 ? raw.length : foundDecimalIndex
+    const decimalIndex =
+        foundDecimalIndex == -1 ? raw.length : foundDecimalIndex
     const intStart = n < 0 ? 1 : 0
     const numIntDigits = decimalIndex - intStart
     if (numIntDigits <= 4) return raw
@@ -35,47 +36,50 @@ function formatNumber(n: number) {
     if (n < 0) result = "-" + result
     return result
 }
-HandlebarsDynamic.registerHelper('formatNumber', formatNumber)
+HandlebarsDynamic.registerHelper("formatNumber", formatNumber)
 
-HandlebarsDynamic.registerHelper('times', function (n, block) {
-    var accum = '';
-    for (var i = 0; i < n; ++i)
-        accum += block.fn(i);
-    return accum;
-});
-
-HandlebarsDynamic.registerHelper('resolveDataPath', function (data, dataPath: string[]) {
-    let finger = data
-    for (const segment of dataPath) {
-        finger = finger[segment];
-    }
-    return typeof finger === "number" ? formatNumber(finger) : finger
+HandlebarsDynamic.registerHelper("times", function (n, block) {
+    var accum = ""
+    for (var i = 0; i < n; ++i) accum += block.fn(i)
+    return accum
 })
 
-interface RankingContext {
-    ExpectedNumberOfItems: number
-    data?: [string, number][]
-}
+HandlebarsDynamic.registerHelper(
+    "resolveDataPath",
+    function (data, dataPath: string[]) {
+        let finger = data
+        for (const segment of dataPath) {
+            finger = finger[segment]
+        }
+        return typeof finger === "number" ? formatNumber(finger) : finger
+    }
+)
 
-export const RankingsRoute = HandlebarsDynamic.compile<{
-    items_mined: RankingContext,
-    items_placed: RankingContext,
-    items_crafted: RankingContext,
-} | undefined>(RankingsRouteHbs)
+export const RankingsRoute = HandlebarsDynamic.compile<
+    | {
+          items_mined: RankingContext
+          items_placed: RankingContext
+          items_crafted: RankingContext
+      }
+    | undefined
+>(RankingsRouteHbs)
 
-export const PlayerRoute = HandlebarsDynamic.compile<{
-    data: any,
-    accomplishments: {
-        config: Record<string, AccomplishmentsSectionItem>,
-        ExpectedNumberOfItems: number,
-    }
-    vitals: {
-        config: Record<string, GenericSectionItem>,
-        ExpectedNumberOfItems: number,
-    }
-    kills: {
-        labels: Record<string, string>,
-        data: Record<string, number>,
-        ExpectedNumberOfItems: number,
-    }
-} | undefined>(PlayerRouteHbs)
+export const PlayerRoute = HandlebarsDynamic.compile<
+    | {
+          data: any
+          accomplishments: {
+              config: Record<string, AccomplishmentsSectionItem>
+              ExpectedNumberOfItems: number
+          }
+          vitals: {
+              config: Record<string, GenericSectionItem>
+              ExpectedNumberOfItems: number
+          }
+          kills: {
+              labels: Record<string, string>
+              data: Record<string, number>
+              ExpectedNumberOfItems: number
+          }
+      }
+    | undefined
+>(PlayerRouteHbs)

@@ -1,0 +1,58 @@
+---
+import { loader, Component } from "src/dynamic/RankingsRoute";
+import Layout from "./Layout.astro";
+import "src/stylesheets/common.css";
+import "src/stylesheets/markdown.css";
+
+const loaderData = await loader(
+    { disableLinks: true },
+    {
+        onError: (error) => {
+            console.error(error);
+        },
+    },
+);
+---
+
+<script>
+    import {
+        Component,
+        loader,
+        placeholderLoader,
+    } from "src/dynamic/RankingsRoute";
+    import * as ErrorBoundary from "src/dynamic/ErrorBoundary";
+
+    const container = document.getElementById("app");
+
+    (async function () {
+        container.innerHTML = Component(placeholderLoader());
+        const loaderData = await loader(
+            {},
+            {
+                onError: (error) => {
+                    container.innerHTML = ErrorBoundary.Scaffolding(
+                        error.message,
+                        error.message,
+                        error.stackTrace,
+                    );
+                },
+            },
+        );
+        if (loaderData) {
+            container.innerHTML = Component(loaderData);
+        }
+    })().catch((e) => {
+        container.innerHTML = ErrorBoundary.Scaffolding(
+            "Error occurred while fetching data.",
+            e.message,
+            e.stackTrace,
+        );
+    });
+</script>
+
+<Layout title="Players"
+    ><div
+        id="app"
+        set:html={`<p class="text-white w-5xl mx-auto">Last Update: ${new Date().toLocaleString(["en-DE", "en-UK", "en-US"])}. If you would like to see up-to-date information, please enable JavaScript.</p>${Component(loaderData)}`}
+    /></Layout
+>

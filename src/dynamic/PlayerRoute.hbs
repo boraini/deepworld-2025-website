@@ -1,11 +1,12 @@
-<main class="flex flex-col sm:flex-row mx-auto my-4 max-w-5xl markdown">
-  <div class="m-4 mb-0 grow">
+<!--<main class="grid gap-4 grid-flow-row grid-rows-3 sm:grid-rows-2 sm:grid-cols-[1fr_1fr] mx-auto p-4 max-w-5xl markdown">-->
+<main class="grid gap-4 grid-cols-1 sm:grid-cols-2 mx-auto p-4 max-w-5xl markdown">
+  <div class="m-0">
     <section class="border-stats body-font bg-blue-950 text-white title-font">
       <h2 class="text-brass" style="margin-top: calc(4 * var(--spacing))">Vitals</h2>
       {{> PlayerKV config=vitals }}
     </section>
   </div>
-  <div class="m-4 mb-0 grow">
+  <div class="m-0">
     <section class="border-stats body-font bg-blue-950 text-white title-font">
       <h2 class="text-brass" style="margin-top: calc(4 * var(--spacing))">Accomplishments</h2>
       {{> PlayerKV config=accomplishments }}

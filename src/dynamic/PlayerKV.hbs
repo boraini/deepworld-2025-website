@@ -4,11 +4,10 @@
         {{#each config.config}}
         <tr>
             <td class="max-w-1/2">{{label}}</td>
-            <td class="px-4">{{resolveDataPath @root.data dataPath}}</td>
+            <td class="px-4 font-number text-right">{{resolveDataPath @root.data dataPath}}</td>
         </tr>
         {{/each}}
         {{else}}
-        {{log @root}}
         {{#times config.ExpectedNumberOfItems}}
         <tr>
             {{> PendingRow index=. }}
