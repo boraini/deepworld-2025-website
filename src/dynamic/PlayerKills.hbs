@@ -4,7 +4,7 @@
         {{#each config.SortedEntityIds}}
         <tr>
             <td class="max-w-1/2">{{lookup ../config.EntityTitles .}}:</td>
-            <td class="px-4">{{#if (lookup @root.data.statistics.kills .)}}{{formatNumber (lookup
+            <td class="px-4 font-number text-right">{{#if (lookup @root.data.statistics.kills .)}}{{formatNumber (lookup
                 @root.data.statistics.kills .)}}{{else}}0{{/if}}</td>
         </tr>
         {{/each}}

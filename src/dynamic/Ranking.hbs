@@ -2,15 +2,18 @@
     <tbody>
         {{#if data}}
         {{#each data}}
-        {{log data}}
         <tr>
             <td>{{ oneBased @index }}&nbsp;-</td>
             <td class="max-w-1/2 text-gold">
+                {{#if @root.disableLinks }}
+                {{0}}
+                {{else}}
                 <a href='./players/{{0}}'>
                     {{0}}
                 </a>
+                {{/if}}
             </td>
-            <td>
+            <td class="font-number text-right ps-2">
                 {{ formatNumber this.[1] }}
             </td>
         </tr>

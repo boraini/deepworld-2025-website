@@ -3,7 +3,8 @@
 @theme {
     --color-brass: #d5a259;
     --color-etched-brass: #1e1200;
-    --color-gold: #ffee00
+    --color-gold: #ffee00;
+    --font-number: "Telegrama", "Consolas", monospace;
 }
 
 :root {
