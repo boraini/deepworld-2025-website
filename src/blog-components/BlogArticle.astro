@@ -1,18 +1,39 @@
 ---
-import BlogCommon from "./BlogCommon.astro";
+import BlogCommon from "./BlogCommon.astro"
 import "../stylesheets/markdown.css"
 
-export type { Article as Props } from "./blog-types";
+export type { Article as Props } from "./blog-types"
 
-const { Component, metadata } = Astro.props;
+const { Component, metadata } = Astro.props
 ---
 
-<BlogCommon title={"Deepworld Blog - " + metadata.title}>
-    <main class="bg-etched-brass mx-auto my-8 p-4 max-w-192 text-white markdown">
-        <h1 class="text-5xl title-font text-brass mb-4">{ metadata.title }</h1>
-        <h2 class="text-2xl mb-4">{ metadata.excerpt }</h2>
+<BlogCommon
+    title={"Deepworld Blog - " + metadata.title}
+    description={metadata.excerpt}
+>
+    <main
+        class="bg-etched-brass mx-auto my-8 p-4 max-w-192 text-white markdown"
+    >
+        <h1 class="text-5xl title-font text-brass mb-4">{metadata.title}</h1>
+        <h2 class="text-2xl mb-4">{metadata.excerpt}</h2>
         {
-            metadata.authors ? <div>Written by: <ul class="inline mx-0 list-none">{metadata.authors.map((author, i) => <li class="inline"><a href={author.url}>{author.fullname}{i < metadata.authors.length - 1 ? ", " : ""}</a></li>)}</ul></div> : null
+            metadata.authors ? (
+                <div>
+                    Written by:{" "}
+                    <ul class="inline mx-0 list-none">
+                        {metadata.authors.map((author, i) => (
+                            <li class="inline">
+                                <a href={author.url}>
+                                    {author.fullname}
+                                    {i < metadata.authors.length - 1
+                                        ? ", "
+                                        : ""}
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            ) : null
         }
         <Component />
     </main>

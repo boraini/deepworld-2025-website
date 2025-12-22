@@ -1,4 +1,6 @@
 ---
+import Head from '@components/Head.astro';
+
 interface Props {
     title: string;
     backlink?: string;
@@ -12,6 +14,8 @@ const { title, backlink } = Astro.props;
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>{title ? `${title} - Deepworld 2025 MMO` : "Not Found"}</title>
+        <Head />
+        <meta name="description" content="Up-to-date list of players and their various rankings, on the Deepworld 2025 MMORPG">
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
