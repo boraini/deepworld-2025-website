@@ -1,4 +1,5 @@
 import { playerApi, proxied } from "./common"
+import { activatePlayerDisplay } from "@components/PlayerDisplay.js"
 
 export { PlayerRoute as Component } from "./HandlebarsRoutes"
 
@@ -193,34 +194,52 @@ export function placeholderLoader() {
     }
 }
 export async function loader({ username }, { onError }) {
-    const data = await fetch(proxied(`${playerApi}/players/${username}`)).then(
-        async (r) => {
-            if (r.ok) {
-                return await r.json()
-            } else {
-                return {
-                    message: "Error occurred while fetching data.",
-                    stackTrace: await r.text(),
-                }
+    // Start loading things
+    const dataPromise = await fetch(
+        proxied(`${playerApi}/players/${username}`)
+    ).then(async (r) => {
+        if (r.ok) {
+            return await r.json()
+        } else {
+            return {
+                message: "Error occurred while fetching data.",
+                stackTrace: await r.text(),
             }
         }
-    )
-    if (data.message) {
-        onError(data)
-        return null
+    })
+
+    if (window && !window.spineScript) {
+        window.spineScript = new Promise((resolve, reject) => {
+            const ORIGIN =
+                "https://v2202410239072292297.goodsrv.de:6443/player-spine"
+            const spineScript = document.createElement("script")
+            spineScript.src = `${ORIGIN}/spine-player.min.js`
+            document.head.appendChild(spineScript)
+            spineScript.onload = resolve
+            spineScript.onerror = reject
+        })
     }
+
+    // Finish loading things
+    const [data] = await Promise.all([dataPromise, window.spineScript])
+
     data.computed ??= {}
     Object.entries(Computations).forEach(([key, computation]) => {
         data.computed[key] = computation.reduce((acc, fn) => fn(acc), data)
     })
+
     return {
         ...placeholderLoader(),
-        data: data,
+        data: await dataPromise,
     }
 }
 export async function HeaderConfig({ username }: { username: string }) {
     return {
         title: username,
-        backlink: `../players`,
+        backlink: `../../players`,
     }
+}
+
+export async function onload(loaderData) {
+    activatePlayerDisplay("player-container", {})
 }

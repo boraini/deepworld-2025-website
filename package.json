@@ -15,6 +15,7 @@
   "dependencies": {
     "@astrojs/mdx": "^4.3.12",
     "@astrojs/sitemap": "^3.6.0",
+    "@esotericsoftware/spine-player": "^4.2.96",
     "@tailwindcss/vite": "^4.1.17",
     "@types/handlebars": "^4.0.40",
     "astro": "^5.16.3",

@@ -84,6 +84,9 @@ import "src/stylesheets/markdown.css";
                     if (result) {
                         render(definition.Component(result));
                     }
+                    if(definition.onload) {
+                        requestAnimationFrame(() => definition.onload(result))
+                    }
                     return;
                 }
             }
