@@ -195,18 +195,24 @@ export function placeholderLoader() {
 }
 export async function loader({ username }, { onError }) {
     // Start loading things
-    const dataPromise = await fetch(
-        proxied(`${playerApi}/players/${username}`)
-    ).then(async (r) => {
-        if (r.ok) {
-            return await r.json()
-        } else {
-            return {
-                message: "Error occurred while fetching data.",
-                stackTrace: await r.text(),
+    const dataPromise = fetch(proxied(`${playerApi}/players/${username}`)).then(
+        async (r) => {
+            if (r.ok) {
+                const data = await r.json()
+                if (data.error) {
+                    return {
+                        message: data.error,
+                    }
+                }
+                return data
+            } else {
+                return {
+                    message: "Error occurred while fetching data.",
+                    stackTrace: await r.text(),
+                }
             }
         }
-    })
+    )
 
     if (window && !window.spineScript) {
         window.spineScript = new Promise((resolve, reject) => {
@@ -222,6 +228,11 @@ export async function loader({ username }, { onError }) {
 
     // Finish loading things
     const [data] = await Promise.all([dataPromise, window.spineScript])
+
+    if (data.message) {
+        onError(data)
+        return
+    }
 
     data.computed ??= {}
     Object.entries(Computations).forEach(([key, computation]) => {
