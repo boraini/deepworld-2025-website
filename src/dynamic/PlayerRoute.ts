@@ -241,5 +241,5 @@ export async function HeaderConfig({ username }: { username: string }) {
 }
 
 export async function onload(loaderData) {
-    activatePlayerDisplay("player-container", {})
+    activatePlayerDisplay("player-container", loaderData.data.appearance)
 }
