@@ -247,7 +247,7 @@ export async function loader({ username }, { onError }) {
 export async function HeaderConfig({ username }: { username: string }) {
     return {
         title: username,
-        backlink: `../../players`,
+        backlink: `..`,
     }
 }
 
