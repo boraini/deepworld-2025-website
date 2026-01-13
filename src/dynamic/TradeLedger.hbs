@@ -1,0 +1,23 @@
+<table
+    class="[&,&_td,&_th]:border-white [&_td,&_th]:border [&_td,&_th]:p-1 **:text-center w-full my-4"
+>
+    <thead>
+        <tr>
+            <th></th>
+            <th>Spent</th>
+            <th>Received</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th>Android Shop</th>
+            <td>{{formatNumber shillings_spent_in_android_shop}}</td>
+            <td>{{formatNumber shillings_received_in_android_shop}}</td>
+        </tr>
+        <tr>
+            <th>Scrap Market</th>
+            <td>{{formatNumber shillings_spent_in_scrap_market}}</td>
+            <td>{{formatNumber shillings_received_in_scrap_market}}</td>
+        </tr>
+    </tbody>
+</table>

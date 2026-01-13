@@ -2,6 +2,7 @@
   <div class="m-0">
     <section class="border-stats body-font bg-blue-950 text-white title-font">
       <h2 class="text-brass" style="margin-top: calc(4 * var(--spacing))">Vitals</h2>
+      <p class="text-gray-400 italic">Played for {{ formatRoman data.statistics.play_time }} seconds<br />({{formatSeconds data.statistics.play_time}})</p>
       {{> PlayerKV config=vitals }}
     </section>
     <section class="mt-4 border-stats body-font bg-blue-950 text-white title-font">
@@ -13,6 +14,10 @@
     <section class="border-stats body-font bg-blue-950 text-white title-font">
       <h2 class="text-brass" style="margin-top: calc(4 * var(--spacing))">Accomplishments</h2>
       {{> PlayerKV config=accomplishments }}
+      {{#if data}}
+      <h3>Shillings Account</h3>
+      {{> TradeLedger data.statistics }}
+      {{/if}}
     </section>
     <section class="mt-4 border-stats body-font bg-blue-950 text-white title-font">
       <h2 class="text-brass" style="margin-top: calc(4 * var(--spacing))">Kills</h2>
