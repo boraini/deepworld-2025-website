@@ -27,8 +27,10 @@ with open("characters-animated+hd2.atlas", "w") as f:
 
     for sprite in sprites:
         print(sprite["name"], file = f)
-        
-        x, y = [int(a) for a in sprite["xy"].split(",")]
-        w, h = [int(a) for a in sprite["size"].split(",")]
 
-        print(f"    bounds: {x}, {y}, {w}, {h}", file = f)
+        x, y = [int(a) for a in sprite["xy"].split(",")]
+        w, h = [int(a) for a in sprite["orig"].split(",")]
+        x_end, y_end = [int(a) for a in sprite["offset"].split(",")]
+        w_end, h_end = [int(a) for a in sprite["size"].split(",")]
+        print(f"    bounds: {x}, {y}, {w_end}, {h_end}", file = f)
+        print(f"    offsets: {x_end}, {y_end}, {w}, {h}", file = f)
