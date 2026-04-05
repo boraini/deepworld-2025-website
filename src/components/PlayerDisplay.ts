@@ -11,16 +11,25 @@ export function activatePlayerDisplay(id: string, appearance: Appearance) {
         preserveDrawingBuffer: false,
         premultipliedAlpha: false,
         success(player) {
-            // Setting an animation is needed to initialize the model update procedure or something
-            player.setAnimation("idle-1")
-            requestAnimationFrame(() => player.pause())
+            function setSlotAttachment(
+                slotKey: string,
+                attachmentName: string | null
+            ) {
+                player.skeleton.findSlot(slotKey).data.attachmentName =
+                    attachmentName
+            }
+            function setSlotColor(slotKey: string, slotColor: string | null) {
+                player.skeleton.findSlot(slotKey).data.color = slotColor
+                    ? spine.Color.fromString(slotColor)
+                    : null
+            }
             if (appearance) {
                 const [attachments, colors] = resolveAttachments(appearance)
                 player.skeleton.slots.forEach((slot) => {
                     const slotKey = slot.data.name
                     if (slotKey in attachments) {
                         if (!attachments[slotKey]) {
-                            player.skeleton.setAttachment(slotKey, null)
+                            setSlotAttachment(slotKey, null)
                             return
                         }
 
@@ -30,14 +39,9 @@ export function activatePlayerDisplay(id: string, appearance: Appearance) {
                         )
 
                         if (attachment) {
-                            player.skeleton.setAttachment(
-                                slotKey,
-                                attachments[slotKey]
-                            )
+                            setSlotAttachment(slotKey, attachments[slotKey])
                             if (slotKey in colors) {
-                                slot.color = spine.Color.fromString(
-                                    colors[slotKey]
-                                )
+                                setSlotColor(slotKey, colors[slotKey])
                             }
                         } else {
                             console.error(
@@ -47,28 +51,20 @@ export function activatePlayerDisplay(id: string, appearance: Appearance) {
                     }
 
                     if (coloredHair.includes(slotKey)) {
-                        slot.color.setFromString(appearance["h*"] + "FF")
-                        console.log(
-                            "hair color on " +
-                                slotKey +
-                                "" +
-                                JSON.stringify(slot.color)
-                        )
+                        setSlotColor(slotKey, appearance["h*"] + "FF")
                     }
 
                     if (coloredSkin.includes(slotKey)) {
-                        slot.color.setFromString(appearance["c*"] + "FF")
-                        console.log(
-                            "skin color on " +
-                                slotKey +
-                                "" +
-                                JSON.stringify(slot.color)
-                        )
+                        setSlotColor(slotKey, appearance["c*"] + "FF")
                     }
                 })
 
                 player.skeleton.updateCache()
             }
+
+            // Setting an animation is needed to initialize the model update procedure or something
+            player.setAnimation("idle-1")
+            requestAnimationFrame(() => player.pause())
         },
     })
 
