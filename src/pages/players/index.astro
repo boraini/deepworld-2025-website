@@ -21,11 +21,15 @@ const loaderData = await loader(
         placeholderLoader,
     } from "src/dynamic/RankingsRoute";
     import * as ErrorBoundary from "src/dynamic/ErrorBoundary";
+import { basePath } from "src/dynamic/common";
 
     const container = document.getElementById("app");
 
     (async function () {
         container.innerHTML = Component(placeholderLoader());
+        const backlink = document.getElementById("backlink")
+        backlink.classList.remove("hidden")
+        backlink.setAttribute("href", basePath)
         const loaderData = await loader(
             {},
             {

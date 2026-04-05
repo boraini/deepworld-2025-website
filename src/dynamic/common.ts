@@ -6,3 +6,4 @@ const proxy = import.meta.env.SSR
 export const proxied = (href) =>
     proxy ? proxy + "/?href=" + encodeURIComponent(href) : href
 export const playerApi = "http://v2202410239072292297.goodsrv.de:5001"
+export const basePath = "/deepworld-2025-website"

@@ -1,6 +1,6 @@
 import { playerApi, proxied } from "./common"
 import { activatePlayerDisplay } from "@components/PlayerDisplay.js"
-
+import { basePath } from "./common.js"
 export { PlayerRoute as Component } from "./HandlebarsRoutes"
 
 // prettier-ignore
@@ -247,7 +247,7 @@ export async function loader({ username }, { onError }) {
 export async function HeaderConfig({ username }: { username: string }) {
     return {
         title: username,
-        backlink: `..`,
+        backlink: `${basePath}/players`,
     }
 }
 
