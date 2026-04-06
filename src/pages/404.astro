@@ -9,20 +9,29 @@ import "src/stylesheets/markdown.css";
 <script>
     // CSR imports
     import * as ErrorBoundary from "src/dynamic/ErrorBoundary";
+    import * as RankingRoute from "src/dynamic/RankingRoute";
     import * as PlayerRoute from "src/dynamic/PlayerRoute";
-
-    const currentPathname = window.location.pathname;
-
-    const playerMatch = currentPathname.match(/\/players\/([^\/]{1,64})\/?$/);
 
     type RouteType =
         | { id: "/players/$username"; username: string }
+        | { id: "/ranking/$type"; type: string }
         | { id: "error"; message: string; stackTrace: string };
 
     const RouteDefinitions = {
         "/players/$username": PlayerRoute,
+        "/ranking/$type": RankingRoute,
     } as const;
 
+    // Find the matching dynamic route
+    const currentPathname = window.location.pathname;
+
+    const rankingMatch = currentPathname.match(/\/ranking\/([^\/]{1,200})\/?$/);
+    if (rankingMatch) {
+        const [_, type] = rankingMatch;
+        onRouteChange({ id: "/ranking/$type", type: type });
+    }
+
+    const playerMatch = currentPathname.match(/\/players\/([^\/]{1,64})\/?$/);
     if (playerMatch) {
         const [_, username] = playerMatch;
         onRouteChange({ id: "/players/$username", username: username });

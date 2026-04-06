@@ -1,17 +1,32 @@
 import { playerApi, proxied } from "./common"
+import { extractRankingData, RankingTitle } from "./RankingCommon.js"
 
 export { RankingsRoute as Component } from "./HandlebarsRoutes"
 
-const stats = ["items_mined", "items_placed", "items_crafted"] as const
+const stats = [
+    "items_mined",
+    "items_placed",
+    "items_crafted",
+    "statistics.dungeons_raided",
+    "statistics.shillings_spent",
+    "statistics.landmark_votes_received",
+] as const
 
 type LoaderData = Record<(typeof stats)[number], RankingContext> & {
+    stats: { key: string; title: string }[]
     disableLinks?: boolean
 }
+
+const ExpectedNumberOfItems = 20
 export function placeholderLoader() {
-    return Object.fromEntries(
-        stats.map((stat) => [stat, { ExpectedNumberOfItems: 50 }])
-    ) as unknown as LoaderData
+    return {
+        stats: stats.map((key) => ({ key: key, title: RankingTitle[key] })),
+        ...Object.fromEntries(
+            stats.map((stat) => [stat, { ExpectedNumberOfItems }])
+        ),
+    } as unknown as LoaderData
 }
+
 export async function loader(
     { disableLinks }: { disableLinks?: boolean },
     { onError }
@@ -31,11 +46,15 @@ export async function loader(
     }
     const result = {
         disableLinks,
+        stats: stats.map((key) => ({ key: key, title: RankingTitle[key] })),
     }
     for (let i = 0; i < stats.length; i++) {
         const stat = stats[i]
-        const data = (await responses[i].json()).map((p) => [p.name, p[stat]])
-        result[stat] = { data: data, ExpectedNumberOfItems: 50 }
+        const data = extractRankingData(
+            (await responses[i].json()).slice(0, ExpectedNumberOfItems),
+            stat
+        )
+        result[stat] = { data: data, ExpectedNumberOfItems }
     }
 
     return result as LoaderData

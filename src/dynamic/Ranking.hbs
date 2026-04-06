@@ -1,14 +1,14 @@
-<table class="box-border w-full">
+<table class="box-border w-full grow">
     <tbody>
         {{#if data}}
         {{#each data}}
         <tr>
-            <td>{{ oneBased @index }}&nbsp;-</td>
+            <td class="w-[4em]">{{ oneBased @index }}&nbsp;-</td>
             <td class="max-w-1/2 text-gold">
                 {{#if @root.disableLinks }}
                 {{0}}
                 {{else}}
-                <a href='{{0}}/'>
+                <a href="{{basePath .}}/players/{{0}}">
                     {{0}}
                 </a>
                 {{/if}}

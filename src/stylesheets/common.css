@@ -5,6 +5,7 @@
     --color-etched-brass: #1e1200;
     --color-gold: #ffee00;
     --font-number: "Telegrama", "Consolas", monospace;
+    --font-title: Telegrama;
 }
 
 :root {

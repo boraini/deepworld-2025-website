@@ -3,6 +3,7 @@ import Handlebars from "handlebars"
 import PendingRowHbs from "./PendingRow.hbs?raw"
 
 import RankingsRouteHbs from "./RankingsRoute.hbs?raw"
+import RankingRouteHbs from "./RankingRoute.hbs?raw"
 import RankingHbs from "./Ranking.hbs?raw"
 
 import PlayerRouteHbs from "./PlayerRoute.hbs?raw"
@@ -11,6 +12,7 @@ import PlayerKVHbs from "./PlayerKV.hbs?raw"
 import TradeLedgerHbs from "./TradeLedger.hbs?raw"
 
 import { AccomplishmentsSectionItem, GenericSectionItem } from "./PlayerRoute"
+import { basePath } from "./common.js"
 
 const HandlebarsDynamic = Handlebars.create()
 
@@ -40,13 +42,11 @@ function formatNumber(n: number) {
 }
 
 function formatRomanSimple(n: number) {
-    console.log(n)
     if (n <= 0) return `(${n})`
 
     function formatSegment(n, s1, s5, s10) {
         if (n < 1) return ""
         const scrutinee = Math.max(1, Math.min(9, Math.floor(n)))
-        console.log(n, scrutinee)
         if (scrutinee === 2) return s1 + s1
         if (scrutinee === 3) return s1 + s1 + s1
         if (scrutinee === 4) return s1 + s5
@@ -120,6 +120,8 @@ HandlebarsDynamic.registerHelper("formatRoman", formatRoman)
 
 HandlebarsDynamic.registerHelper("formatSeconds", formatSeconds)
 
+HandlebarsDynamic.registerHelper("basePath", () => basePath)
+
 HandlebarsDynamic.registerHelper("times", function (n, block) {
     var accum = ""
     for (var i = 0; i < n; ++i) accum += block.fn(i)
@@ -145,6 +147,10 @@ export const RankingsRoute = HandlebarsDynamic.compile<
       }
     | undefined
 >(RankingsRouteHbs)
+
+export const RankingRoute = HandlebarsDynamic.compile<{
+    ranking: RankingContext
+}>(RankingRouteHbs)
 
 export const PlayerRoute = HandlebarsDynamic.compile<
     | {
