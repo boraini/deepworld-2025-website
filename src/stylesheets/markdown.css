@@ -42,17 +42,4 @@
     margin-bottom: 0.75em;
 }
 
-.markdown a {
-    color: var(--color-gray-300);
-    text-decoration: underline;
-}
-
-.markdown a:hover {
-    color: var(--color-teal-300);
-}
-
-.markdown a:active {
-    color: var(--color-teal-500);
-}
-
 }
