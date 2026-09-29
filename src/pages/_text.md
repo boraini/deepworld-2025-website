@@ -2,6 +2,10 @@
 
 Using the open-source original server code, we have created a new server software written in Java that improves on bugs and player experience. We have also modified the Unity client that is available on Steam to include new items, various new items, and most importantly support to connect to the new server. All new and returning players need to do is to download the modified client as a ZIP file and run the .exe file inside. The iOS, Mac client also works, but it requires patching as described in Kuroppoi's server GitHub repository, and players on it will have a poor experience since they won't have access to the new items and bug fixes.
 
+# Notes - as of 13 September 2026
+
+Graptik has decided to program upcoming versions of the game himself, since no one else seems to be able to keep up with his pace. That doesn't mean the game will be any worse now. It will actually be much better since there is no overhead of communicating changes with each other anymore, and the bugs will be fixed much faster. It has to be this way I guess.
+
 # Special Thanks
 
 - **Bytebin, LLC** for making the server and game configuration open-source and still available in 2025.

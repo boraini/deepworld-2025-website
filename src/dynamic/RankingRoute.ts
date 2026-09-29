@@ -68,6 +68,6 @@ export async function HeaderConfig(route: { type: string }) {
     const title = RankingTitle[route.type] ?? route.type
     return {
         title: `${title}`,
-        backlink: `${basePath}/players`,
+        backlink: `${basePath}/legacy-players`,
     }
 }

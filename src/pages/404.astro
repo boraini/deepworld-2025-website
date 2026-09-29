@@ -13,12 +13,12 @@ import "src/stylesheets/markdown.css";
     import * as PlayerRoute from "src/dynamic/PlayerRoute";
 
     type RouteType =
-        | { id: "/players/$username"; username: string }
+        | { id: "/legacy-players/$username"; username: string }
         | { id: "/ranking/$type"; type: string }
         | { id: "error"; message: string; stackTrace: string };
 
     const RouteDefinitions = {
-        "/players/$username": PlayerRoute,
+        "/legacy-players/$username": PlayerRoute,
         "/ranking/$type": RankingRoute,
     } as const;
 
@@ -31,10 +31,10 @@ import "src/stylesheets/markdown.css";
         onRouteChange({ id: "/ranking/$type", type: type });
     }
 
-    const playerMatch = currentPathname.match(/\/players\/([^\/]{1,64})\/?$/);
+    const playerMatch = currentPathname.match(/\/legacy-players\/([^\/]{1,64})\/?$/);
     if (playerMatch) {
         const [_, username] = playerMatch;
-        onRouteChange({ id: "/players/$username", username: username });
+        onRouteChange({ id: "/legacy-players/$username", username: username });
     }
 
     function setHeader(config?: { title: string; backlink?: string }) {

@@ -62,6 +62,6 @@ export async function loader(
 export async function HeaderConfig(route: { username: string }) {
     return {
         title: `${route.username} on Deepworld 2025 MMO`,
-        backlink: "/players",
+        backlink: "/legacy-players",
     }
 }
