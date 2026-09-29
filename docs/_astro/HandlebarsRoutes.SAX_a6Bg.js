@@ -53,7 +53,7 @@ Expecting `+x.join(", ")+", got '"+(this.terminals_[k]||k)+"'":C="Parse error on
                 {{#if @root.disableLinks }}
                 {{0}}
                 {{else}}
-                <a href="{{basePath .}}/players/{{0}}">
+                <a href="{{basePath .}}/legacy-players/{{0}}">
                     {{0}}
                 </a>
                 {{/if}}
