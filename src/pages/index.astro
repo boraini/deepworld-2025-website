@@ -1,0 +1,23 @@
+---
+// SSR imports
+import * as ErrorBoundary from "src/dynamic/ErrorBoundary";
+import Layout from "src/layouts/Player.astro";
+import "src/stylesheets/common.css";
+import "src/stylesheets/markdown.css";
+import TrilizardSleeping from "@assets/images/trilizard-sleeping.svg";
+import { basePath } from "src/dynamic/common";
+
+---
+
+<Layout>
+<main class="mx-auto my-4 border-stats max-w-5xl bg-blue-950 text-white markdown">
+<h1 class="text-brass" style="margin-top: calc(4 * var(--spacing))">Thank you for playing with me.</h1>
+<p>
+Please visit the new website that is (being) made by Graptik. You should be able to find it on the <a href="https://discord.gg/Deepworld"></a>live server's official Discord.</a>
+</p>
+<p>
+    Also, feel free to visit my personal website, <a href="https://boraini.com">boraini.com</a> . You can find my social media links there in case you want to follow up with my future projects. You can be sure that I will be around!
+</p>
+<img class="m-auto" src={TrilizardSleeping.src} alt="TriLizard sleeping..." width="526" height="352" />
+<a href={`${basePath}/legacy-index`}>or just visit the website anyways.</a>
+</Layout>
